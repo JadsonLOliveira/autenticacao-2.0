@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class UsuariosResponseDTO {
     @ApiModelProperty(position = 0)
-    private String usuarios;
+    private String usuario;
     @ApiModelProperty(position = 1)
     private String senha;
     @ApiModelProperty(position = 2)

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 @Service
 @RequiredArgsConstructor
-public class UsuariosService {
+public class UsuarioService {
 
-    private final UsuariosRepository usuariosRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -23,34 +23,34 @@ public class UsuariosService {
     public String conectar(String usuario, String senha) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario, senha));
-            return jwtTokenProvider.criarToken(usuario, usuariosRepository.findByUsuarios(usuario).getTipoUsuario());
+            return jwtTokenProvider.criarToken(usuario, usuarioRepository.findByUsuario(usuario).getTipoUsuario());
         } catch (AuthenticationException e) {
             throw new CustomException("Usuário ou senha incorretos", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
-    public String cadastrar(Usuarios usuarios) {
-        if (!usuariosRepository.existsByUsuarios(usuarios.getUsuario())) {
-            usuarios.setSenha(passwordEncoder.encode(usuarios.getSenha()));
-            usuariosRepository.save(usuarios);
-            return jwtTokenProvider.criarToken(usuarios.getUsuario(), usuarios.getTipoUsuario());
+    public String cadastrar(Usuario usuario) {
+        if (!usuarioRepository.existsByUsuario(usuario.getUsuario())) {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+            usuarioRepository.save(usuario);
+            return jwtTokenProvider.criarToken(usuario.getUsuario(), usuario.getTipoUsuario());
         } else {
             throw new CustomException("Usuário já existente", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
-    public void delete(String usuarios) {
-        usuariosRepository.deleteByUsuarios(usuarios);
+    public void delete(String usuario) {
+        usuarioRepository.deleteByUsuario(usuario);
     }
-    public Usuarios search(String usuario) {
-        Usuarios usuarios = usuariosRepository.findByUsuarios(usuario);
+    public Usuario search(String usuario) {
+        Usuario usuarios = usuarioRepository.findByUsuario(usuario);
         if (usuarios == null) {
             throw new CustomException("Usuário inexistente", HttpStatus.NOT_FOUND);
         }
         return usuarios;
     }
-    public Usuarios meuUsuario(HttpServletRequest req) {
-        return usuariosRepository.findByUsuarios(jwtTokenProvider.getUsuarios(jwtTokenProvider.resolveToken(req)));
+    public Usuario meuUsuario(HttpServletRequest req) {
+        return usuarioRepository.findByUsuario(jwtTokenProvider.getUsuario(jwtTokenProvider.resolveToken(req)));
     }
-    public String atualizar(String usuarios) {
-        return jwtTokenProvider.criarToken(usuarios, usuariosRepository.findByUsuarios(usuarios).getTipoUsuario());
+    public String atualizar(String usuario) {
+        return jwtTokenProvider.criarToken(usuario, usuarioRepository.findByUsuario(usuario).getTipoUsuario());
     }
 }

@@ -11,71 +11,71 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/usuarios")
-@Api(tags = "usuarios")
+@RequestMapping("/usuario")
+@Api(tags = "usuario")
 @RequiredArgsConstructor
-public class UsuariosController {
+public class UsuarioController {
 
-    private final UsuariosService usuariosService;
+    private final UsuarioService usuarioService;
     private final ModelMapper modelMapper;
 
     @PostMapping("/conectar")
-    @ApiOperation(value = "${UsuariosController.conectar}")
+    @ApiOperation(value = "${UsuarioController.conectar}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Erro ao conectar-se"), //
             @ApiResponse(code = 422, message = "Invalido o Usuário ou Senha indicados")})
     public String login(//
                         @ApiParam("Usuario") @RequestParam String usuario, //
                         @ApiParam("Senha") @RequestParam String senha) {
-        return usuariosService.conectar(usuario, senha);
+        return usuarioService.conectar(usuario, senha);
     }
     @PostMapping("/cadastrar")
-    @ApiOperation(value = "${UsuariosController.cadastrar}")
+    @ApiOperation(value = "${UsuarioController.cadastrar}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Erro ao conectar-se"), //
             @ApiResponse(code = 403, message = "Acesso negado"), //
             @ApiResponse(code = 422, message = "Usuário em uso")})
     public String cadastrar(@ApiParam("Usuaário Cadastrado") @RequestBody UsuariosDataDTO usuario) {
-        return usuariosService.cadastrar(modelMapper.map(usuario, Usuarios.class));
+        return usuarioService.cadastrar(modelMapper.map(usuario, Usuario.class));
     }
 
     @DeleteMapping(value = "/{usuario}")
     @PreAuthorize("hasRole('Administrador')")
-    @ApiOperation(value = "${UsuariosController.delete}", authorizations = { @Authorization(value="apiKey") })
+    @ApiOperation(value = "${UsuarioController.delete}", authorizations = { @Authorization(value="apiKey") })
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Erro ao conectar-se"), //
             @ApiResponse(code = 403, message = "Acesso negado"), //
             @ApiResponse(code = 404, message = "Usuário inexistente"), //
             @ApiResponse(code = 500, message = "Expirou ou está invalido seu Token")})
     public String delete(@ApiParam("Usuario") @PathVariable String usuario) {
-        usuariosService.delete(usuario);
+        usuarioService.delete(usuario);
         return usuario;
     }
     @GetMapping(value = "/{username}")
     @PreAuthorize("hasRole('Administrador')")
-    @ApiOperation(value = "${UsuariosController.search}", response = UsuariosResponseDTO.class, authorizations = { @Authorization(value="apiKey") })
+    @ApiOperation(value = "${UsuarioController.search}", response = UsuariosResponseDTO.class, authorizations = { @Authorization(value="apiKey") })
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Erro ao conectar-se"), //
             @ApiResponse(code = 403, message = "Acesso negado"), //
             @ApiResponse(code = 404, message = "Usuário inexistente"), //
             @ApiResponse(code = 500, message = "Expirou ou está invalido seu Token")})
     public UsuariosResponseDTO search(@ApiParam("Usuario") @PathVariable String usuario) {
-        return modelMapper.map(usuariosService.search(usuario), UsuariosResponseDTO.class);
+        return modelMapper.map(usuarioService.search(usuario), UsuariosResponseDTO.class);
     }
 
     @GetMapping(value = "/meuUsuario")
     @PreAuthorize("hasRole('Administrador') or hasRole('Cliente')")
-    @ApiOperation(value = "${UsuariosController.me}", response = UsuariosResponseDTO.class, authorizations = { @Authorization(value="apiKey") })
+    @ApiOperation(value = "${UsuarioController.me}", response = UsuariosResponseDTO.class, authorizations = { @Authorization(value="apiKey") })
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Erro ao conectar-se"), //
             @ApiResponse(code = 403, message = "Acesso negado"), //
             @ApiResponse(code = 500, message = "Expirou ou está invalido seu Token")})
     public UsuariosResponseDTO meuUsuario(HttpServletRequest req) {
-        return modelMapper.map(usuariosService.meuUsuario(req), UsuariosResponseDTO.class);
+        return modelMapper.map(usuarioService.meuUsuario(req), UsuariosResponseDTO.class);
     }
     @GetMapping("/atualizar")
     @PreAuthorize("hasRole('Administrador') or hasRole('Cliente')")
     public String atualizar(HttpServletRequest req) {
-        return usuariosService.atualizar(req.getRemoteUser());
+        return usuarioService.atualizar(req.getRemoteUser());
     }
 }

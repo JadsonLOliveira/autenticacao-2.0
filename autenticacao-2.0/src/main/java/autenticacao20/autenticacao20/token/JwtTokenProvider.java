@@ -55,11 +55,11 @@ public class JwtTokenProvider {
                 .compact();
     }
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = meuUsuario.loadUserByUsername(getUsuarios(token));
+        UserDetails userDetails = meuUsuario.loadUserByUsername(getUsuario(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUsuarios(String token) {
+    public String getUsuario(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
     public String resolveToken(HttpServletRequest req) {

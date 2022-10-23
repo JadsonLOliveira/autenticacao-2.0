@@ -1,8 +1,8 @@
 package autenticacao20.autenticacao20;
 
 import autenticacao20.autenticacao20.usuarios.TipoUsuario;
-import autenticacao20.autenticacao20.usuarios.Usuarios;
-import autenticacao20.autenticacao20.usuarios.UsuariosService;
+import autenticacao20.autenticacao20.usuarios.Usuario;
+import autenticacao20.autenticacao20.usuarios.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class Application implements CommandLineRunner {
 
-	final UsuariosService usuariosService;
+	final UsuarioService usuariosService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -29,7 +29,7 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... params) throws Exception {
-		Usuarios administrador = new Usuarios();
+		Usuario administrador = new Usuario();
 		administrador.setUsuario("admin");
 		administrador.setSenha("admin");
 //		admin.setEmail("admin@email.com");
@@ -37,7 +37,7 @@ public class Application implements CommandLineRunner {
 
 		usuariosService.cadastrar(administrador);
 
-		Usuarios cliente = new Usuarios();
+		Usuario cliente = new Usuario();
 		cliente.setUsuario("client");
 		cliente.setSenha("client");
 //		client.setEmail("client@email.com");

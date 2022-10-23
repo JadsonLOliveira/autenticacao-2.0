@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
-
+@Entity
 @Data
 @NoArgsConstructor
-public class Usuarios {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

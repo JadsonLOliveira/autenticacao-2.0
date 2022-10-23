@@ -1,7 +1,7 @@
 package autenticacao20.autenticacao20.token;
 
-import autenticacao20.autenticacao20.usuarios.Usuarios;
-import autenticacao20.autenticacao20.usuarios.UsuariosRepository;
+import autenticacao20.autenticacao20.usuarios.Usuario;
+import autenticacao20.autenticacao20.usuarios.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MeuUsuario implements UserDetailsService {
 
-    private final UsuariosRepository usuariosRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
-        final Usuarios usuarios = usuariosRepository.findByUsuarios(usuario);
+        final Usuario usuarios = usuarioRepository.findByUsuario(usuario);
 
         if (usuarios == null) {
             throw new UsernameNotFoundException("O usuário '" + usuario + "' não existe");
